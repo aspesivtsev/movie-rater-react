@@ -7,12 +7,12 @@ import './App.css';
 
 function App() {
 
-  const [movies, setMovie] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [editedMovie, setEditedMovie] = useState(null);
 
   useEffect(()=>{
-    fetch("http://127.0.0.1:8000/api/movies/", {
+    fetch("http://localhost:8000/api/movies/", {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ function App() {
       }
     })
     .then( resp => resp.json())
-    .then( resp => setMovie(resp))
+    .then( resp => setMovies(resp))
     .catch( error => console.log(error))
   }, [])
 
@@ -35,6 +35,16 @@ function App() {
     setSelectedMovie(null);
   }
 
+  const updatedMovie = movie => {
+    const newMovies = movies.map( mov => {
+      if (mov.id === movie.id) {
+        return movie;
+      }
+      return mov;
+    })
+    setMovies(newMovies)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -43,7 +53,7 @@ function App() {
       <div className="layout">
         <MovieList movies={movies} movieClicked={loadMovie} editClicked={editClicked}/>   
         <MovieDetails movie={selectedMovie} updateMovie={loadMovie} /> 
-        { editedMovie ? <MovieForm movie={editedMovie} /> : null}
+        { editedMovie ? <MovieForm movie={editedMovie} updatedMovie={updatedMovie}/> : null}
              
       </div>
     </div>
