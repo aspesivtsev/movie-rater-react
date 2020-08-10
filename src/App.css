@@ -49,3 +49,6 @@
   font-size: 1.2rem;
   margin: 23px 5px;
 }
+.pointer{
+  cursor: pointer;
+}
